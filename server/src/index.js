@@ -32,7 +32,31 @@ export const io = new Server(server, {
         credentials: true
       }
 });
-app.use(helmet());
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      "default-src": ["'self'"],
+      "script-src": [
+        "'self'",
+        "https://checkout.razorpay.com"
+      ],
+      "img-src": [
+        "'self'",
+        "data:",
+        "https://images.unsplash.com",
+        "https://res.cloudinary.com"
+      ],
+      "style-src": [
+        "'self'",
+        "'unsafe-inline'"
+      ],
+      "connect-src": [
+        "'self'",
+        "wss:"
+      ]
+    }
+  }
+}));
 if (process.env.NODE_ENV === 'production') {
   // Same-origin requests do not require CORS headers.
   // Do not enable cross-origin credentialed requests.
