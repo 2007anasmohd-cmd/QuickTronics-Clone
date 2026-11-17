@@ -7,3 +7,6 @@ server/.env
 .env.production
 dist/
 build/
+**/node_modules/
+.env.*
+!.env.example

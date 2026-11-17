@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: quicktronics
+    runtime: node
+    plan: free
+    buildCommand: npm ci --prefix server && npm ci --prefix client && npm run build --prefix client
+    startCommand: npm start --prefix server
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: "20"
+      - key: NODE_ENV
+        value: production
+      - key: JWT_SECRET
+        generateValue: true
+      - key: MONGODB_URI
+        sync: false
+      - key: ADMIN_EMAIL
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false

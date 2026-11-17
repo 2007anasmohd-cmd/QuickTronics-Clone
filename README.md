@@ -9,7 +9,19 @@ Premium dark electronics storefront with separate customer and owner systems. Th
 3. Install dependencies from the project root with `npm install`, then install the two applications with `npm install --prefix server` and `npm install --prefix client`.
 4. Run `npm run seed --prefix server` once to add the starter categories, inventory, and `WELCOME300` coupon to MongoDB.
 5. Run `npm run dev` from the root. Vite serves `http://localhost:5173`; the API listens on `http://localhost:5000`.
-6. For a production frontend bundle, run `npm run build`. Run the API with `npm start --prefix server` after setting `CLIENT_URL` to the deployed storefront origin.
+6. For a production frontend bundle, run `npm run build`. The Render deployment below serves the frontend and API from the same origin; if you host them separately, set `CLIENT_URL` to the frontend's origin.
+
+## Free Render deployment
+
+The root `render.yaml` configures one Render web service to build the React frontend and serve it from the Express API. The service uses Render's free plan, which may sleep when idle and take a short time to wake up. Free-plan limits can change; check Render's current plan details before deploying.
+
+1. Push this project to a GitHub repository. Do not commit `.env` files or credentials.
+2. Create a MongoDB Atlas free cluster, create a database user with a strong password, and copy its connection string. Replace the password placeholder and include the database name `quicktronics` in the URI. Configure Atlas Network Access to allow connections from Render; Render's outbound IPs may not be fixed, so restrict access where possible and use a strong database password.
+3. In Render, choose **New → Blueprint**, connect the repository, and follow the prompts from `render.yaml`. Enter `MONGODB_URI`, `ADMIN_EMAIL`, and `ADMIN_PASSWORD` when prompted. Render generates `JWT_SECRET` automatically.
+4. Wait for the service deployment to finish, then open its `onrender.com` URL. The storefront and API share that origin; `/api/health` reports service and database status.
+5. To add payment, email, or image-upload integrations, configure the corresponding `RAZORPAY_*`, `RESEND_API_KEY` / `EMAIL_FROM`, or `CLOUDINARY_*` variables in the Render dashboard.
+
+The first successful admin sign-in at `/admin/login` creates the owner account using `ADMIN_EMAIL` and `ADMIN_PASSWORD`. Keep those values private. A Render free service is intended for hobby/testing use, not a production store; review provider limits and the security notes below before accepting real customer or payment data.
 
 ## Data and owner access
 
